@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String              @id // Firebase UID
+  email        String              @unique
+  display_name String?
+  avatar_url   String?
+  timezone     String              @default("UTC")
+  created_at   DateTime            @default(now())
+  settings     UserSettings?
+  tasks        Task[]
+  habits       Habit[]
+  habit_logs   HabitLog[]
+  categories   Category[]
+  reminders    Reminder[]
+  push_subs            PushSubscription[]
+  snapshots            AnalyticsSnapshot[]
+  google_refresh_token String?
+  google_calendar_id   String?
+}
+
+model UserSettings {
+  id                   String @id @default(cuid())
+  user_id              String @unique
+  user                 User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  theme                String @default("light")
+  notification_enabled Boolean @default(true)
+  reminder_defaults    Json?
+  export_prefs         Json?
+}
+
+model Task {
+  id              String     @id @default(cuid())
+  user_id         String
+  user            User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  title           String
+  description     String?
+  priority        String     @default("medium") // low | medium | high | urgent
+  status          String     @default("pending") // pending | completed | archived
+  category_id     String?
+  category        Category?  @relation(fields: [category_id], references: [id])
+  due_date        DateTime?
+  due_time        String?
+  reminder_at     DateTime?
+  recurrence_rule Json?
+  is_pinned       Boolean    @default(false)
+  is_archived     Boolean    @default(false)
+  notes           String?
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
+  completed_at    DateTime?
+  google_event_id String?
+  reminders       Reminder[]
+  subtasks        Subtask[]
+}
+
+model Subtask {
+  id           String   @id @default(cuid())
+  task_id      String
+  task         Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  title        String
+  is_completed Boolean  @default(false)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+}
+
+model Habit {
+  id              String         @id @default(cuid())
+  user_id         String
+  user            User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  title           String
+  goal            String?
+  notes           String?
+  category_id     String?
+  category        Category?      @relation(fields: [category_id], references: [id])
+  reminder_time   String?
+  recurrence_rule Json?
+  status          String         @default("active") // active | paused | archived
+  target_days     Int?           // Optional challenge goal (e.g. 30 for a 30-day challenge)
+  created_at      DateTime       @default(now())
+  updated_at      DateTime       @updatedAt
+  habit_logs      HabitLog[]
+  streak_summary  StreakSummary?
+  reminders       Reminder[]
+}
+
+model HabitLog {
+  id        String   @id @default(cuid())
+  habit_id  String
+  habit     Habit    @relation(fields: [habit_id], references: [id], onDelete: Cascade)
+  user_id   String
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  date      DateTime @db.Date
+  status    String // completed | skipped | missed
+  notes     String?
+  logged_at DateTime @default(now())
+
+  @@unique([habit_id, date])
+}
+
+model StreakSummary {
+  id                  String    @id @default(cuid())
+  habit_id            String    @unique
+  habit               Habit     @relation(fields: [habit_id], references: [id], onDelete: Cascade)
+  current_streak      Int       @default(0)
+  longest_streak      Int       @default(0)
+  last_completed_date DateTime?
+  updated_at          DateTime  @updatedAt
+}
+
+model Category {
+  id      String  @id @default(cuid())
+  user_id String
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  name    String
+  color   String?
+  type    String // task | habit | both
+  tasks   Task[]
+  habits  Habit[]
+}
+
+model Reminder {
+  id          String   @id @default(cuid())
+  user_id     String
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  entity_type String // task | habit
+  entity_id   String
+  task        Task?    @relation(fields: [entity_id], references: [id], onDelete: Cascade, map: "reminder_task_fk")
+  habit       Habit?   @relation(fields: [entity_id], references: [id], onDelete: Cascade, map: "reminder_habit_fk")
+  remind_at   DateTime
+  is_sent     Boolean  @default(false)
+  created_at  DateTime @default(now())
+}
+
+model PushSubscription {
+  id                  String   @id @default(cuid())
+  user_id             String
+  user                User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  subscription_object Json
+  created_at          DateTime @default(now())
+}
+
+model AnalyticsSnapshot {
+  id            String   @id @default(cuid())
+  user_id       String
+  user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  snapshot_date DateTime @db.Date
+  data          Json
+  type          String // weekly | monthly
+}
