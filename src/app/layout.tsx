@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Personal Productivity",
-  description: "Minimalist personal operating system",
+  title: "HabitToDo",
+  description: "Premium personal habit and task tracker",
 };
 
 export default function RootLayout({

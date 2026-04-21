@@ -2,9 +2,9 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Personal Productivity OS',
-    short_name: 'Productivity OS',
-    description: 'A personal operating system for daily productivity',
+    name: 'HabitToDo',
+    short_name: 'HabitToDo',
+    description: 'A premium personal habit and task tracker',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

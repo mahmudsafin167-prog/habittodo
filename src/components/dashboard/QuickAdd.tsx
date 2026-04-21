@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { useTaskStore } from '@/store/taskStore';
 import { useHabitStore } from '@/store/habitStore';
 import { useCategoryStore } from '@/store/categoryStore';
+import { useUIStore } from '@/store/uiStore';
 import { Modal } from '@/components/ui/Modal';
-import { Plus } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export function QuickAdd() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isQuickAddOpen, setQuickAddOpen } = useUIStore();
+  const pathname = usePathname();
   const [type, setType] = useState<'task' | 'habit'>('task');
   const [title, setTitle] = useState('');
   const [categoryId, setCategoryId] = useState('');
@@ -46,7 +49,7 @@ export function QuickAdd() {
     }
 
     // Close modal immediately for a snappy feel
-    setIsOpen(false);
+    setQuickAddOpen(false);
     setTitle('');
     setCategoryId('');
     setNotes('');
@@ -78,18 +81,20 @@ export function QuickAdd() {
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        disabled={!isOnline}
-        title={!isOnline ? "No internet. Please reconnect to create new items." : "Quick Add"}
-        className={`fixed bottom-20 right-6 md:bottom-10 md:right-10 p-4 rounded-full shadow-lg transition-all z-50 flex items-center justify-center ${
-          isOnline ? 'bg-indigo-600 text-white hover:bg-indigo-700 hover:scale-105 active:scale-95' : 'bg-gray-400 text-white cursor-not-allowed opacity-75'
-        }`}
-      >
-        <Plus className="w-6 h-6" />
-      </button>
+      {pathname !== '/settings' && (
+        <button
+          onClick={() => setQuickAddOpen(true)}
+          disabled={!isOnline}
+          title={!isOnline ? "No internet. Please reconnect to create new items." : "Quick Add"}
+          className={`fixed bottom-10 right-10 p-4 rounded-full shadow-2xl transition-all z-50 hidden md:flex items-center justify-center border-2 border-white/20 ${
+            isOnline ? 'bg-gradient-to-tr from-indigo-600 to-purple-600 text-white hover:scale-110 active:scale-95' : 'bg-gray-400 text-white cursor-not-allowed opacity-75'
+          }`}
+        >
+          <Sparkles className="w-6 h-6 fill-white/20" />
+        </button>
+      )}
 
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Quick Add">
+      <Modal isOpen={isQuickAddOpen} onClose={() => setQuickAddOpen(false)} title="Quick Add">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex bg-gray-100 p-1 rounded-lg">
             <button

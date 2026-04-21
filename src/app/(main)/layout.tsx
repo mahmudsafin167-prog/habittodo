@@ -3,7 +3,7 @@
 import { useAuthStore } from "@/store/authStore";
 import { auth } from "@/lib/firebaseClient";
 import { signOut } from "firebase/auth";
-import { LogOut, Home, CheckSquare, Calendar, PieChart, Settings, WifiOff, RefreshCw, Clock, Tags, Target, Layers } from "lucide-react";
+import { LogOut, Home, CheckSquare, Calendar, PieChart, Settings, WifiOff, RefreshCw, Clock, Tags, Target, Layers, Plus } from "lucide-react";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,6 +14,7 @@ import { subscribeToPush } from "@/lib/pushSubscription";
 import { useEffect, useState } from "react";
 import { Menu, X, User as UserIcon } from "lucide-react";
 import { useDesignStore } from "@/store/designStore";
+import { useUIStore } from "@/store/uiStore";
 
 export default function DashboardLayout({
   children,
@@ -24,6 +25,7 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const { isOnline, isSyncing } = useOfflineSync();
   const { designMode } = useDesignStore();
+  const { setQuickAddOpen } = useUIStore();
 
   const handleSignOut = async () => {
     await signOut(auth);
@@ -63,7 +65,7 @@ export default function DashboardLayout({
       {/* Sidebar for Desktop / Bottom Nav for Mobile */}
       <aside className="w-full md:w-64 bg-white dark:bg-gray-900 glass:bg-white/40 dark:glass:bg-gray-900/40 glass:backdrop-blur-xl border-r border-gray-200 dark:border-gray-800 glass:border-white/20 dark:glass:border-gray-700/30 flex flex-col justify-between fixed bottom-0 md:relative z-20 md:h-screen shadow-[0_-2px_10px_rgba(0,0,0,0.05)] md:shadow-none transition-colors">
         <div className="p-4 hidden md:flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">Productivity</h1>
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">HabitToDo</h1>
         </div>
         
         <nav className="flex-1 flex md:flex-col justify-around md:justify-start px-2 py-2 md:py-4 md:gap-2">
@@ -90,35 +92,77 @@ export default function DashboardLayout({
             })}
           </div>
 
-          {/* Mobile: Show only core items + More button */}
-          <div className="flex md:hidden w-full justify-around items-center">
-            {coreNavItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-              
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                    isActive 
-                      ? "text-indigo-600 dark:text-indigo-400" 
-                      : "text-gray-600 dark:text-gray-400"
+          {/* Mobile: Center FAB Layout */}
+          <div className="flex md:hidden w-full justify-around items-center relative">
+            {/* Left Items */}
+            <div className="flex w-[40%] justify-around">
+              {coreNavItems.slice(0, 2).map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`flex flex-col items-center gap-1 px-2 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                      isActive 
+                        ? "text-indigo-600 dark:text-indigo-400" 
+                        : "text-gray-600 dark:text-gray-400"
+                    }`}
+                  >
+                    <Icon className="w-6 h-6" />
+                    <span className="text-[10px]">{item.name}</span>
+                  </Link>
+                );
+              })}
+            </div>
+            
+            {/* Center FAB */}
+            {pathname !== '/settings' && (
+              <div className="relative -top-5 flex justify-center w-[20%]">
+                <button
+                  onClick={() => setQuickAddOpen(true)}
+                  disabled={!isOnline}
+                  className={`p-4 rounded-full shadow-xl transition-all flex items-center justify-center ${
+                    isOnline 
+                      ? 'bg-gradient-to-tr from-indigo-600 to-purple-600 text-white hover:scale-105 active:scale-95' 
+                      : 'bg-gray-400 text-white cursor-not-allowed opacity-75'
                   }`}
                 >
-                  <Icon className="w-6 h-6" />
-                  <span className="text-[10px]">{item.name}</span>
-                </Link>
-              );
-            })}
-            
-            <button
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 transition-colors"
-            >
-              <Menu className="w-6 h-6" />
-              <span className="text-[10px]">Menu</span>
-            </button>
+                  <Plus className="w-7 h-7 stroke-[2.5px]" />
+                </button>
+              </div>
+            )}
+            {/* If Settings, just put a spacer */}
+            {pathname === '/settings' && <div className="w-[20%]" />}
+
+            {/* Right Items */}
+            <div className="flex w-[40%] justify-around">
+              {coreNavItems.slice(2, 3).map((item) => {
+                const Icon = item.icon;
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`flex flex-col items-center gap-1 px-2 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                      isActive 
+                        ? "text-indigo-600 dark:text-indigo-400" 
+                        : "text-gray-600 dark:text-gray-400"
+                    }`}
+                  >
+                    <Icon className="w-6 h-6" />
+                    <span className="text-[10px]">{item.name}</span>
+                  </Link>
+                );
+              })}
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 transition-colors"
+              >
+                <Menu className="w-6 h-6" />
+                <span className="text-[10px]">Menu</span>
+              </button>
+            </div>
           </div>
         </nav>
 
