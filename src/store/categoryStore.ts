@@ -13,7 +13,7 @@ interface CategoryState {
   isLoading: boolean;
   error: string | null;
   fetchCategories: () => Promise<void>;
-  addCategory: (cat: Partial<Category>) => Promise<void>;
+  addCategory: (cat: Partial<Category>) => Promise<Category>;
   updateCategory: (id: string, updates: Partial<Category>) => Promise<void>;
   deleteCategory: (id: string) => Promise<void>;
 }
@@ -55,6 +55,7 @@ export const useCategoryStore = create<CategoryState>((set, get) => ({
       if (!res.ok) throw new Error('Failed to create category');
       const newCat = await res.json();
       set((state) => ({ categories: [...state.categories, newCat].sort((a,b) => a.name.localeCompare(b.name)) }));
+      return newCat;
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       set({ error: msg });
