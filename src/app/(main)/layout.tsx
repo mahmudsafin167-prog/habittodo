@@ -61,9 +61,9 @@ export default function DashboardLayout({
   const allNavItems = [...coreNavItems, ...moreNavItems];
 
   return (
-    <div data-design={designMode} className="min-h-screen bg-gray-50 dark:bg-gray-950 glass:bg-gradient-to-br glass:from-indigo-50 glass:via-white glass:to-purple-50 dark:glass:from-gray-900 dark:glass:via-indigo-950/20 dark:glass:to-gray-900 flex flex-col md:flex-row transition-colors">
+    <div data-design={designMode} className="min-h-screen bg-gray-50 dark:bg-gray-950 glass:bg-gradient-to-br glass:from-indigo-50 glass:via-white glass:to-purple-50 dark:glass:bg-none flex flex-col md:flex-row transition-colors">
       {/* Sidebar for Desktop / Bottom Nav for Mobile */}
-      <aside className="w-full md:w-64 bg-white dark:bg-gray-900 glass:bg-white/40 dark:glass:bg-gray-900/40 glass:backdrop-blur-xl border-r border-gray-200 dark:border-gray-800 glass:border-white/20 dark:glass:border-gray-700/30 flex flex-col justify-between fixed bottom-0 md:relative z-20 md:h-screen shadow-[0_-2px_10px_rgba(0,0,0,0.05)] md:shadow-none transition-colors">
+      <aside className="w-full md:w-64 bg-white dark:bg-gray-900 glass:bg-white/40 dark:glass:bg-gray-900/30 glass:backdrop-blur-2xl border-t md:border-t-0 md:border-r border-gray-200 dark:border-gray-800 glass:border-white/20 dark:glass:border-white/10 flex flex-col justify-between fixed bottom-0 md:relative z-20 md:h-screen shadow-[0_-8px_30px_rgba(0,0,0,0.05)] dark:shadow-[0_-8px_30px_rgba(0,0,0,0.2)] md:shadow-none transition-colors">
         <div className="p-4 hidden md:flex items-center justify-between">
           <h1 className="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">HabitToDo</h1>
         </div>
@@ -79,9 +79,9 @@ export default function DashboardLayout({
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex flex-col md:flex-row items-center gap-1 md:gap-3 px-3 py-1.5 md:py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex flex-col md:flex-row items-center gap-1 md:gap-3 px-3 py-1.5 md:py-2.5 rounded-lg text-sm font-medium transition-all active:scale-95 ${
                     isActive 
-                      ? "text-indigo-600 bg-indigo-50 dark:text-indigo-400 dark:bg-indigo-900/30" 
+                      ? "text-indigo-600 bg-indigo-50 dark:text-indigo-400 dark:bg-indigo-900/30 shadow-[0_0_15px_rgba(99,102,241,0.15)]" 
                       : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
                   }`}
                 >
@@ -103,9 +103,9 @@ export default function DashboardLayout({
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`flex flex-col items-center gap-1 px-2 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    className={`flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl text-sm font-medium transition-all active:scale-95 ${
                       isActive 
-                        ? "text-indigo-600 dark:text-indigo-400" 
+                        ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20 shadow-[0_0_15px_rgba(99,102,241,0.2)]" 
                         : "text-gray-600 dark:text-gray-400"
                     }`}
                   >
@@ -144,9 +144,9 @@ export default function DashboardLayout({
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`flex flex-col items-center gap-1 px-2 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    className={`flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl text-sm font-medium transition-all active:scale-95 ${
                       isActive 
-                        ? "text-indigo-600 dark:text-indigo-400" 
+                        ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20 shadow-[0_0_15px_rgba(99,102,241,0.2)]" 
                         : "text-gray-600 dark:text-gray-400"
                     }`}
                   >
@@ -157,7 +157,7 @@ export default function DashboardLayout({
               })}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 transition-colors"
+                className="flex flex-col items-center gap-1 px-2 py-1.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 transition-all active:scale-95"
               >
                 <Menu className="w-6 h-6" />
                 <span className="text-[10px]">Menu</span>

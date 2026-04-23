@@ -43,6 +43,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
 }
 
 /* =========================================
@@ -57,17 +58,35 @@ html:not(.dark) [data-design="glass"] .bg-white {
 }
 
 html.dark [data-design="glass"] .dark\:bg-gray-900 {
-  background-color: rgba(17, 24, 39, 0.5) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-color: rgba(55, 65, 81, 0.4) !important;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  background-color: rgba(11, 15, 25, 0.4) !important; /* More transparent for Aurora glow */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
-/* Liquid Gradient Animation */
-[data-design="glass"] {
+/* Liquid Gradient Animation (Light Mode) */
+html:not(.dark) [data-design="glass"] {
   background-size: 200% 200%;
   animation: gradientShift 15s ease infinite;
+}
+
+/* Aurora Glow (Dark Mode Premium) */
+html.dark [data-design="glass"] {
+  background-color: #0b0f19; /* Deep space blue */
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.2) 0%, transparent 40%),
+    radial-gradient(circle at 20% 40%, rgba(59, 130, 246, 0.15) 0%, transparent 40%);
+  background-attachment: fixed;
+  background-size: 200% 200%;
+  animation: auroraBreathe 20s ease-in-out infinite alternate;
+}
+
+@keyframes auroraBreathe {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 100%; }
 }
 
 @keyframes gradientShift {

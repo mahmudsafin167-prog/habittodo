@@ -109,14 +109,14 @@ export function QuickAdd() {
           <div className="flex bg-gray-100 dark:bg-gray-800/50 p-1 rounded-lg">
             <button
               type="button"
-              className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-colors ${type === 'task' ? 'bg-white dark:bg-gray-800 shadow-sm text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
+              className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all active:scale-[0.98] ${type === 'task' ? 'bg-white dark:bg-gray-800 shadow-sm text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
               onClick={() => setType('task')}
             >
               Task
             </button>
             <button
               type="button"
-              className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-colors ${type === 'habit' ? 'bg-white dark:bg-gray-800 shadow-sm text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
+              className={`flex-1 py-1.5 text-sm font-medium rounded-md transition-all active:scale-[0.98] ${type === 'habit' ? 'bg-white dark:bg-gray-800 shadow-sm text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
               onClick={() => setType('habit')}
             >
               Habit
@@ -153,7 +153,7 @@ export function QuickAdd() {
              <button
                type="button"
                onClick={() => setShowAdvanced(!showAdvanced)}
-               className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
+               className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-all active:scale-95"
              >
                {showAdvanced ? '- Hide advanced details' : '+ Add details (Notes, Reminders)'}
              </button>
@@ -190,7 +190,7 @@ export function QuickAdd() {
             <button
               type="submit"
               disabled={!title.trim() || isLoading}
-              className="w-full bg-gray-900 dark:bg-indigo-600 text-white font-medium px-4 py-2.5 rounded-lg hover:bg-gray-800 dark:hover:bg-indigo-700 transition-colors disabled:opacity-50"
+              className="w-full bg-gray-900 dark:bg-indigo-600 text-white font-medium px-4 py-2.5 rounded-lg hover:bg-gray-800 dark:hover:bg-indigo-700 transition-all active:scale-[0.98] disabled:opacity-50"
             >
               {isLoading ? 'Saving...' : `Add ${type === 'task' ? 'Task' : 'Habit'}`}
             </button>
@@ -205,7 +205,7 @@ export function QuickAdd() {
                     if (success) setQuickAddOpen(false);
                  }}
                  disabled={isLoading}
-                 className="w-full flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-semibold px-4 py-3 rounded-xl transition-all shadow-sm border border-indigo-100 disabled:opacity-50"
+                 className="w-full flex items-center justify-center gap-2 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-semibold px-4 py-3 rounded-xl transition-all active:scale-[0.98] shadow-sm border border-indigo-100 disabled:opacity-50"
                >
                  <Package className="w-5 h-5" />
                  {isAddingPack ? 'Adding Starter Pack...' : '🎁 Add Ultimate Starter Pack (9 Habits)'}
