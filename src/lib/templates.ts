@@ -85,5 +85,24 @@ export const PREDEFINED_TEMPLATES: RoutineTemplate[] = [
       { type: 'habit', title: 'No Screens', goal: '1 hour before bed', reminder_time: '21:30' },
       { type: 'task', title: 'Prepare clothes for tomorrow', priority: 'medium' }
     ]
+  },
+  {
+    id: 'monk_mode',
+    name: 'Monk Mode Protocol',
+    description: 'The ultimate self-mastery routine. Build iron discipline, abstain from cheap dopamine, and focus on holistic growth.',
+    icon: '🧘‍♂️',
+    color: 'bg-slate-100 text-slate-700 dark:bg-slate-900/40 dark:text-slate-400',
+    items: [
+      { type: 'habit', title: 'Join the 5 AM Club', goal: 'Wake up at 5 AM to start the day with purpose', reminder_time: '05:00' },
+      { type: 'habit', title: 'Spiritual Connection', goal: '5 Daily Prayers / Namaz' },
+      { type: 'habit', title: 'Energy Conservation', goal: 'Practice self-control, avoid masturbation and conserve energy' },
+      { type: 'habit', title: 'Smoke-Free Day', goal: 'Protect your lungs and stay smoke-free today' },
+      { type: 'habit', title: 'Physical Mastery', goal: 'Engage in any physical exercise or sports' },
+      { type: 'habit', title: 'Optimal Hydration', goal: 'Drink 2-3 liters of water' },
+      { type: 'habit', title: 'Deep Work Session', goal: 'Study or focus deeply for 2 uninterrupted hours' },
+      { type: 'habit', title: 'Language Mastery', goal: 'Daily English practice' },
+      { type: 'habit', title: 'Restorative Sleep', goal: 'Ensure 6-7 hours of quality sleep', reminder_time: '23:00' }
+    ]
   }
 ];
+
