@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 
 const ConfirmDialog = dynamic(() => import('@/components/ui/ConfirmDialog').then(mod => mod.ConfirmDialog), { ssr: false });
 const TaskDrawer = dynamic(() => import('@/components/tasks/TaskDrawer').then(mod => mod.TaskDrawer), { ssr: false });
+import { Dropdown } from '@/components/ui/Dropdown';
 
 export default function TasksPage() {
   const { tasks, isLoading, hasMore, isLoadingMore, fetchNextPage, fetchTasks, updateTask, deleteTask, searchQuery, setSearchQuery, filterCategory, setFilterCategory, filterPriority, setFilterPriority, sortBy, setSortBy, filterStatus, setFilterStatus } = useTaskStore();
@@ -64,47 +65,50 @@ export default function TasksPage() {
       </header>
 
       {/* Filters and Search Bar */}
-      <div className="flex flex-col md:flex-row gap-3">
-        <div className="relative flex-1">
+      <div className="flex flex-col gap-3">
+        <div className="relative w-full">
           <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input 
             type="text" 
             placeholder="Search tasks..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+            className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-all glass:bg-white/40 dark:glass:bg-gray-900/40 glass:backdrop-blur-xl"
           />
         </div>
-        <div className="flex gap-2">
-          <select 
-            value={filterStatus} 
-            onChange={(e) => setFilterStatus(e.target.value as 'all' | 'active' | 'archived')}
-            className="px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
-          >
-            <option value="active">Active Tasks</option>
-            <option value="archived">Archived</option>
-            <option value="all">All Status</option>
-          </select>
-          <select 
-            value={filterPriority || 'all'} 
-            onChange={(e) => setFilterPriority(e.target.value === 'all' ? null : e.target.value)}
-            className="px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
-          >
-            <option value="all">All Priorities</option>
-            <option value="urgent">Urgent</option>
-            <option value="high">High</option>
-            <option value="medium">Medium</option>
-            <option value="low">Low</option>
-          </select>
-          <select 
-            value={sortBy} 
-            onChange={(e) => setSortBy(e.target.value as 'due_date' | 'priority' | 'created_at')}
-            className="px-3 py-2 border border-gray-200 dark:border-gray-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
-          >
-            <option value="due_date">Sort by Due Date</option>
-            <option value="priority">Sort by Priority</option>
-            <option value="created_at">Sort by Newest</option>
-          </select>
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide min-w-full">
+          <Dropdown
+            value={filterStatus}
+            onChange={(v) => setFilterStatus(v as any)}
+            options={[
+              { value: 'active', label: 'Active Tasks' },
+              { value: 'archived', label: 'Archived' },
+              { value: 'all', label: 'All Status' }
+            ]}
+            className="min-w-[140px]"
+          />
+          <Dropdown
+            value={filterPriority || 'all'}
+            onChange={(v) => setFilterPriority(v === 'all' ? null : v)}
+            options={[
+              { value: 'all', label: 'All Priorities' },
+              { value: 'urgent', label: 'Urgent' },
+              { value: 'high', label: 'High' },
+              { value: 'medium', label: 'Medium' },
+              { value: 'low', label: 'Low' }
+            ]}
+            className="min-w-[140px]"
+          />
+          <Dropdown
+            value={sortBy}
+            onChange={(v) => setSortBy(v as any)}
+            options={[
+              { value: 'due_date', label: 'Sort by Due Date' },
+              { value: 'priority', label: 'Sort by Priority' },
+              { value: 'created_at', label: 'Sort by Newest' }
+            ]}
+            className="min-w-[160px]"
+          />
         </div>
       </div>
 
