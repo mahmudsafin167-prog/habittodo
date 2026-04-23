@@ -169,7 +169,7 @@ export default function HabitsPage() {
                      </div>
                    </div>
 
-                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                   <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                      <button 
                        onClick={(e) => { e.stopPropagation(); toggleStatus(habit.id, habit.status); }}
                        className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
