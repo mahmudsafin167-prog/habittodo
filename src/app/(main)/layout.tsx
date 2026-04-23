@@ -3,7 +3,7 @@
 import { useAuthStore } from "@/store/authStore";
 import { auth } from "@/lib/firebaseClient";
 import { signOut } from "firebase/auth";
-import { LogOut, Home, CheckSquare, Calendar, PieChart, Settings, WifiOff, RefreshCw, Clock, Tags, Target, Layers, Plus } from "lucide-react";
+import { LogOut, Home, CheckSquare, Calendar, PieChart, Settings, WifiOff, RefreshCw, Clock, Tags, Target, Layers, Plus, Sparkles } from "lucide-react";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -122,13 +122,13 @@ export default function DashboardLayout({
                 <button
                   onClick={() => setQuickAddOpen(true)}
                   disabled={!isOnline}
-                  className={`p-4 rounded-full shadow-xl transition-all flex items-center justify-center ${
+                  className={`p-4 rounded-full shadow-2xl transition-all flex items-center justify-center border-2 border-white/20 ${
                     isOnline 
-                      ? 'bg-gradient-to-tr from-indigo-600 to-purple-600 text-white hover:scale-105 active:scale-95' 
+                      ? 'bg-gradient-to-tr from-indigo-600 to-purple-600 text-white hover:scale-110 active:scale-95 shadow-indigo-500/30' 
                       : 'bg-gray-400 text-white cursor-not-allowed opacity-75'
                   }`}
                 >
-                  <Plus className="w-7 h-7 stroke-[2.5px]" />
+                  <Sparkles className="w-7 h-7 fill-white/20" />
                 </button>
               </div>
             )}
