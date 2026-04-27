@@ -51,7 +51,9 @@ export function MetricsBanner() {
   // Note: a real system needs to cross-reference with habit_logs for "today" to know if it's done. 
   // For the MVP, we just show streaks and active count.
   const activeHabits = habits.filter(h => h.status === 'active');
-  const totalStreak = activeHabits.reduce((sum, h) => sum + (h.streak_summary?.current_streak || 0), 0);
+  const highestStreak = activeHabits.length > 0 
+    ? Math.max(...activeHabits.map(h => h.streak_summary?.current_streak || 0)) 
+    : 0;
   
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -77,9 +79,9 @@ export function MetricsBanner() {
       </div>
 
       <div className="bg-white dark:bg-gray-900 p-5 rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm flex flex-col justify-between">
-        <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">Total Streak Days</span>
+        <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">Highest Active Streak</span>
         <div className="mt-2 flex items-baseline gap-2">
-          <span className="text-3xl font-semibold text-orange-500 dark:text-orange-400">{totalStreak}</span>
+          <span className="text-3xl font-semibold text-orange-500 dark:text-orange-400">{highestStreak}</span>
           <span className="text-xl">🔥</span>
         </div>
       </div>

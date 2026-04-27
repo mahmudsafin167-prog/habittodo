@@ -12,6 +12,7 @@ interface HabitDrawerProps {
 
 export function HabitDrawer({ habit, isOpen, onClose }: HabitDrawerProps) {
   const [heatmap, setHeatmap] = useState<HeatmapCell[]>([]);
+  const [selectedCell, setSelectedCell] = useState<HeatmapCell | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditingTarget, setIsEditingTarget] = useState(false);
   const [targetInput, setTargetInput] = useState("");
@@ -196,15 +197,43 @@ export function HabitDrawer({ habit, isOpen, onClose }: HabitDrawerProps) {
                  {Array.from({ length: 90 }).map((_, i) => <div key={i} className="w-3.5 h-3.5 bg-gray-200 dark:bg-gray-800 rounded-sm"></div>)}
                </div>
             ) : (
-              <div className="flex flex-wrap gap-1.5">
-                 {heatmap.map((cell, i) => {
-                    let bgColor = 'bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700'; 
-                    if (cell.status === 'completed') bgColor = 'bg-indigo-500 shadow-sm';
-                    else if (cell.status === 'skipped') bgColor = 'bg-amber-400';
-                    else if (cell.status === 'missed') bgColor = 'bg-rose-200';
-                    return <div key={i} title={`${cell.date}: ${cell.status}`} className={`w-[14px] h-[14px] rounded-[3px] ${bgColor} transition-transform hover:scale-125 cursor-pointer`} />
-                 })}
-              </div>
+              <>
+                <div className="flex flex-wrap gap-1.5">
+                   {heatmap.map((cell, i) => {
+                      let bgColor = 'bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700'; 
+                      if (cell.status === 'completed') bgColor = 'bg-indigo-500 shadow-sm';
+                      else if (cell.status === 'skipped') bgColor = 'bg-amber-400';
+                      else if (cell.status === 'missed') bgColor = 'bg-rose-200';
+                      const isSelected = selectedCell?.date === cell.date;
+                      return (
+                        <button 
+                          key={i} 
+                          title={`${cell.date}: ${cell.status}`} 
+                          onClick={() => setSelectedCell(isSelected ? null : cell)}
+                          className={`w-[14px] h-[14px] rounded-[3px] p-0 ${bgColor} transition-all hover:scale-125 cursor-pointer ${isSelected ? 'ring-2 ring-offset-1 ring-indigo-500 ring-offset-white dark:ring-offset-gray-900 scale-125 z-10' : ''}`} 
+                        />
+                      );
+                   })}
+                </div>
+                {selectedCell && (
+                  <div className="mt-4 flex items-center justify-between bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 rounded-xl shadow-sm animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                      <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {new Date(selectedCell.date + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })}
+                      </span>
+                    </div>
+                    <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-full ${
+                      selectedCell.status === 'completed' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400' :
+                      selectedCell.status === 'skipped' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' :
+                      selectedCell.status === 'missed' ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' :
+                      'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400'
+                    }`}>
+                      {selectedCell.status}
+                    </span>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
